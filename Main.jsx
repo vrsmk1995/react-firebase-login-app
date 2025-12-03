@@ -1,11 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Login";
-import Home from "./Home";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Signup from "./Signup";
+import PhoneLogin from "./src/Components/PhoneLogin";
+import ForgotPassword from "./src/Components/ForgotPassword";
+import Home from "./src/Components/Home";
+import Signup from "./src/Components/Signup";
+import Login from "./src/Components/Login";
+
 
 export default function Main() {
   return (
@@ -13,9 +17,11 @@ export default function Main() {
       <React.StrictMode>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/phone-login" element={<PhoneLogin />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </BrowserRouter>
       </React.StrictMode>

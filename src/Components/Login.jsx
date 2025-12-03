@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../src/firebase"; // <-- adjust path if needed
+import { auth } from "../firebase"; // make sure firebase.js is in src/
 import { toast } from "react-toastify";
+import "../Css/Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -25,11 +25,12 @@ export default function Login() {
     setError("");
 
     try {
-      // Firebase login
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       const user = userCred.user;
+
       const loginTime = new Date().toLocaleString();
       const sessionId = Date.now();
+
       const currentSession = {
         uid: user.uid,
         email: user.email,
@@ -38,16 +39,17 @@ export default function Login() {
         logoutTime: null,
         sessionId,
       };
+
+      // active user
       localStorage.setItem("user", JSON.stringify(currentSession));
+
+      // history
       const existingHistory =
         JSON.parse(localStorage.getItem("loginHistory")) || [];
       existingHistory.push(currentSession);
-
       localStorage.setItem("loginHistory", JSON.stringify(existingHistory));
 
       toast.success("Login successful!");
-
-      // Navigate to home
       navigate("/home");
     } catch (err) {
       console.error(err);
@@ -92,7 +94,6 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
               <button
                 type="button"
                 className="password-toggle"
@@ -103,6 +104,15 @@ export default function Login() {
             </div>
           </div>
 
+          <p
+            className="login-footer"
+            style={{ textAlign: "right", marginTop: "4px" }}
+          >
+            <span onClick={() => navigate("/forgot-password")}>
+              Forgot password?
+            </span>
+          </p>
+
           {error && <div className="login-error">{error}</div>}
 
           <button type="submit" className="login-btn">
@@ -112,6 +122,10 @@ export default function Login() {
 
         <p className="login-footer">
           Don’t have an account? <span onClick={goToSignup}>Create one</span>
+        </p>
+        <p className="login-footer">
+          Or login with phone?{" "}
+          <span onClick={() => navigate("/phone-login")}>Phone Login</span>
         </p>
       </div>
     </div>

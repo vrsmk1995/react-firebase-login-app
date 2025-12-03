@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Signup.css";
+import "../Css/Signup.css";
 
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "./firebase"; // 👈 adjust if your path is different
+import { auth } from "../firebase"; // 👈 adjust if your path is different
 import { toast } from "react-toastify";
+import { FaLaugh } from "react-icons/fa";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -131,7 +132,7 @@ export default function Signup() {
                 className="password-toggle"
                 onClick={() => setShowPassword((prev) => !prev)}
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? "🙈" : <FaLaugh />}
               </button>
             </div>
           </div>
@@ -151,7 +152,7 @@ export default function Signup() {
                 className="password-toggle"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
               >
-                {showConfirmPassword ? "🙈" : "👁️"}
+                {showConfirmPassword ? "🙈" : <FaLaugh/> }
               </button>
             </div>
           </div>

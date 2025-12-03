@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Home.css";
+import "../Css/Home.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {

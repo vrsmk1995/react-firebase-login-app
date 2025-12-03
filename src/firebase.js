@@ -1,8 +1,7 @@
-// Firebase core imports
+// firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, RecaptchaVerifier } from "firebase/auth";
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCQH4ufVOtZnAB3n6zYfrOcEAqL_mV9T_s",
   authDomain: "my-login-app-1ebab.firebaseapp.com",
@@ -12,9 +11,17 @@ const firebaseConfig = {
   appId: "1:227469138704:web:3c9dfda74aa39d4c682395",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Auth
 export const auth = getAuth(app);
+
+export const generateRecaptcha = () => {
+  if (!window.recaptchaVerifier) {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      { size: "invisible" }
+    );
+  }
+};
+
 export default app;

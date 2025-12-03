@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../firebase"; // 👈 adjust path if needed
+import { auth } from "../firebase"; 
 import { toast } from "react-toastify";
-import "./Login.css"; // reuse same styling or create ForgotPassword.css
+import "../Css/Signup.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
