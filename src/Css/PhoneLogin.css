@@ -121,7 +121,7 @@
 /* Mobile responsive */
 @media (max-width: 480px) {
   .phone-container {
-    padding: 20px 18px;
+    padding: 20px 16px;
   }
 
   .phone-header {
