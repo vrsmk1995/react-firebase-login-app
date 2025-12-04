@@ -65,7 +65,32 @@ export default function PhoneLogin() {
       const user = result.user;
       console.log("Phone login success:", user);
 
+      // 🔹 Create session object like email login
+      const loginTime = new Date().toLocaleString();
+      const sessionId = Date.now();
+
+      const currentSession = {
+        uid: user.uid,
+        phone: user.phoneNumber,
+        email: user.email || "", // probably null for phone auth
+        name: user.displayName || "",
+        loginTime,
+        logoutTime: null,
+        sessionId,
+      };
+
+      // 🔹 Save active user for Home.jsx
+      localStorage.setItem("user", JSON.stringify(currentSession));
+
+      // 🔹 Save to loginHistory as well
+      const existingHistory =
+        JSON.parse(localStorage.getItem("loginHistory")) || [];
+      existingHistory.push(currentSession);
+      localStorage.setItem("loginHistory", JSON.stringify(existingHistory));
+
       toast.success("Phone login successful");
+
+      // 🔹 Now Home will see user in localStorage and NOT redirect to login
       navigate("/home");
     } catch (err) {
       console.error("Verify OTP error:", err);

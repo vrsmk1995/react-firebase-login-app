@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [history,setHistory]=useState([]);
+  const [history, setHistory] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +15,9 @@ export default function Home() {
       return;
     }
 
-    setUser(JSON.parse(storedUser));
+    const parsedUser = JSON.parse(storedUser);
+    setUser(parsedUser);
+
     const storedHistory = localStorage.getItem("loginHistory");
     if (storedHistory) {
       setHistory(JSON.parse(storedHistory));
@@ -25,36 +27,54 @@ export default function Home() {
   const handleLogout = () => {
     const logoutTime = new Date().toLocaleString();
 
-    // Update logout time before removing user
     if (user) {
-      const storedHistory = JSON.parse(localStorage.getItem("loginHistory")) || [];
-      // const updatedUser = { ...user, logoutTime };
+      const storedHistory =
+        JSON.parse(localStorage.getItem("loginHistory")) || [];
 
-      // Update the corresponding entry in login history
+      // Update only this session
       const updatedHistory = storedHistory.map((session) =>
-        session.sessionId === user.sessionId ? { ...session, logoutTime } : session
+        session.sessionId === user.sessionId
+          ? { ...session, logoutTime }
+          : session
       );
-      localStorage.setItem("lastSession", JSON.stringify(updatedHistory));
+
+      // Save updated history
+      localStorage.setItem("loginHistory", JSON.stringify(updatedHistory));
       setHistory(updatedHistory);
-      console.log("Updated History:", updatedHistory);
+
+      // Optional: store last logout session
       const updatedUser = { ...user, logoutTime };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      localStorage.setItem("lastSession", JSON.stringify(updatedUser));
     }
 
-    // Remove active user
+    // Remove active user and navigate to Login
     localStorage.removeItem("user");
-
     window.location.href = "/";
   };
 
-  if (!user) return null; 
+  if (!user) return null;
+
+  // --------------------------------------------------
+  // 📌 DISPLAY NAME LOGIC
+  // If email → show email
+  // If phone → show clean phone (remove +91)
+  // --------------------------------------------------
+  let displayId = "Guest";
+
+  if (user.email) {
+    displayId = user.email;
+  } else if (user.phone) {
+    // remove +91
+    displayId = user.phone.replace("+91", "");
+  }
+  // --------------------------------------------------
 
   return (
     <div className="home-container">
       <h1 className="home-title">Home Page</h1>
 
       <p className="home-welcome">
-        Welcome <span>{user.email}</span> 👋
+        Welcome <span>{displayId}</span> 👋
       </p>
 
       <h3 className="home-subtitle">
@@ -76,27 +96,32 @@ export default function Home() {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Email</th>
+                <th>Email / Phone</th>
                 <th>Login Time</th>
                 <th>Logout Time</th>
               </tr>
             </thead>
             <tbody>
-              {history.map((session, index) => (
-                <tr key={session.sessionId}>
-                  <td>{index + 1}</td>
-                  <td>{session.email}</td>
-                  <td>{session.loginTime}</td>
-                  <td>{session.logoutTime || "Still Logged In / Closed"}</td>
-                </tr>
-              ))}
+              {history.map((session, index) => {
+                // Show email or phone cleanly
+                const id =
+                  session.email ||
+                  session.phone?.replace("+91", "") ||
+                  "Unknown";
+
+                return (
+                  <tr key={session.sessionId}>
+                    <td>{index + 1}</td>
+                    <td>{id}</td>
+                    <td>{session.loginTime}</td>
+                    <td>{session.logoutTime || "Still Logged In / Closed"}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}
       </div>
-      <button className="home-logout-btn" onClick={handleLogout}>
-        Log Out
-      </button>
     </div>
   );
 }
