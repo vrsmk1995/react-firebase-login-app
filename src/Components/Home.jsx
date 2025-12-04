@@ -31,23 +31,45 @@ export default function Home() {
       const storedHistory =
         JSON.parse(localStorage.getItem("loginHistory")) || [];
 
-      // Update only this session
-      const updatedHistory = storedHistory.map((session) =>
-        session.sessionId === user.sessionId
-          ? { ...session, logoutTime }
-          : session
-      );
+      // const updatedHistory = storedHistory.map((session) => {
+      //   // Same user (by uid/phone/email) AND no logoutTime yet
+      //   const isSameUser =
+      //     session.uid === user.uid ||
+      //     session.phone === user.phone ||
+      //     session.email === user.email;
 
-      // Save updated history
+      //   if (isSameUser && !session.logoutTime) {
+      //     return { ...session, logoutTime };
+      //   }
+      //   return session;
+      // });
+
+      const updatedHistory = storedHistory.map((session) => {
+        const sameSessionById =
+          session.sessionId && session.sessionId === user.sessionId;
+        const oldSessionSameUserNoId =
+          !session.sessionId &&
+          (session.uid === user.uid ||
+            session.phone === user.phone ||
+            session.email === user.email);
+
+        if (
+          (sameSessionById || oldSessionSameUserNoId) &&
+          !session.logoutTime
+        ) {
+          return { ...session, logoutTime };
+        }
+
+        return session;
+      });
+
       localStorage.setItem("loginHistory", JSON.stringify(updatedHistory));
       setHistory(updatedHistory);
 
-      // Optional: store last logout session
       const updatedUser = { ...user, logoutTime };
       localStorage.setItem("lastSession", JSON.stringify(updatedUser));
     }
 
-    // Remove active user and navigate to Login
     localStorage.removeItem("user");
     window.location.href = "/";
   };
@@ -114,7 +136,7 @@ export default function Home() {
                     <td>{index + 1}</td>
                     <td>{id}</td>
                     <td>{session.loginTime}</td>
-                    <td>{session.logoutTime || "Still Logged In / Closed"}</td>
+                    <td>{session.logoutTime}</td>
                   </tr>
                 );
               })}

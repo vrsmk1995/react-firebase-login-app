@@ -17,15 +17,15 @@ export default function Main() {
       <React.StrictMode>
         <BrowserRouter>
           <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/phone-login" element={<PhoneLogin />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/phone-login" element={<PhoneLogin />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </BrowserRouter>
       </React.StrictMode>
-      <ToastContainer position="top-center" autoClose={2000} />
+      <ToastContainer position="top-left" autoClose={2000} />
     </>
   );
 }

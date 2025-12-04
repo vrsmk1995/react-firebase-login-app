@@ -8,7 +8,7 @@ import "../Css/PhoneLogin.css";
 export default function PhoneLogin() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
-  const [step, setStep] = useState("phone"); // "phone" | "otp"
+  const [step, setStep] = useState("phone");
   const navigate = useNavigate();
 
   const handleSendOtp = async (e) => {
@@ -19,12 +19,9 @@ export default function PhoneLogin() {
       return;
     }
 
-    // Basic India-style normalization
     let raw = phone.replace(/\s+/g, "");
     if (raw.startsWith("+")) {
-      // use as is
     } else {
-      // assume 10 digit Indian number
       if (raw.startsWith("0")) raw = raw.slice(1);
       if (raw.length !== 10) {
         toast.error("Enter valid 10-digit mobile number");
@@ -65,24 +62,21 @@ export default function PhoneLogin() {
       const user = result.user;
       console.log("Phone login success:", user);
 
-      // 🔹 Create session object like email login
       const loginTime = new Date().toLocaleString();
       const sessionId = Date.now();
 
       const currentSession = {
         uid: user.uid,
         phone: user.phoneNumber,
-        email: user.email || "", // probably null for phone auth
+        email: user.email || "",
         name: user.displayName || "",
         loginTime,
         logoutTime: null,
         sessionId,
       };
 
-      // 🔹 Save active user for Home.jsx
       localStorage.setItem("user", JSON.stringify(currentSession));
 
-      // 🔹 Save to loginHistory as well
       const existingHistory =
         JSON.parse(localStorage.getItem("loginHistory")) || [];
       existingHistory.push(currentSession);
@@ -90,7 +84,6 @@ export default function PhoneLogin() {
 
       toast.success("Phone login successful");
 
-      // 🔹 Now Home will see user in localStorage and NOT redirect to login
       navigate("/home");
     } catch (err) {
       console.error("Verify OTP error:", err);
@@ -100,7 +93,7 @@ export default function PhoneLogin() {
 
   return (
     <div className="phone-page">
-      <h1 className="phone-header">Phone Login</h1>
+      <h1 className="phone-header">Mobile Login</h1>
 
       <div className="phone-container">
         {step === "phone" ? (
@@ -123,7 +116,7 @@ export default function PhoneLogin() {
           </form>
         ) : (
           <form onSubmit={handleVerifyOtp}>
-            <label className="phone-label">Enter OTP</label>
+            <label className="phone-label">Enter Your OTP</label>
             <input
               type="text"
               className="phone-input"
@@ -133,7 +126,7 @@ export default function PhoneLogin() {
             />
 
             <button type="submit" className="phone-btn">
-              Verify & Login
+              Verify Your OTP
             </button>
           </form>
         )}
