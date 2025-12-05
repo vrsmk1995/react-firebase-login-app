@@ -122,9 +122,10 @@
 @media (max-width: 480px) {
   .phone-container {
     padding: 20px 16px;
+    width: auto;
   }
 
   .phone-header {
-    font-size: 24px;
+    font-size: 18px;
   }
 }

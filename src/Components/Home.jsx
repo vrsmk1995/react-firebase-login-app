@@ -11,7 +11,7 @@ export default function Home() {
     const storedUser = localStorage.getItem("user");
 
     if (!storedUser) {
-      navigate("/"); // redirect to login if no user found
+      navigate("/");
       return;
     }
 
@@ -30,19 +30,6 @@ export default function Home() {
     if (user) {
       const storedHistory =
         JSON.parse(localStorage.getItem("loginHistory")) || [];
-
-      // const updatedHistory = storedHistory.map((session) => {
-      //   // Same user (by uid/phone/email) AND no logoutTime yet
-      //   const isSameUser =
-      //     session.uid === user.uid ||
-      //     session.phone === user.phone ||
-      //     session.email === user.email;
-
-      //   if (isSameUser && !session.logoutTime) {
-      //     return { ...session, logoutTime };
-      //   }
-      //   return session;
-      // });
 
       const updatedHistory = storedHistory.map((session) => {
         const sameSessionById =
@@ -76,11 +63,6 @@ export default function Home() {
 
   if (!user) return null;
 
-  // --------------------------------------------------
-  // 📌 DISPLAY NAME LOGIC
-  // If email → show email
-  // If phone → show clean phone (remove +91)
-  // --------------------------------------------------
   let displayId = "Guest";
 
   if (user.email) {
@@ -89,7 +71,6 @@ export default function Home() {
     // remove +91
     displayId = user.phone.replace("+91", "");
   }
-  // --------------------------------------------------
 
   return (
     <div className="home-container">
@@ -125,7 +106,6 @@ export default function Home() {
             </thead>
             <tbody>
               {history.map((session, index) => {
-                // Show email or phone cleanly
                 const id =
                   session.email ||
                   session.phone?.replace("+91", "") ||

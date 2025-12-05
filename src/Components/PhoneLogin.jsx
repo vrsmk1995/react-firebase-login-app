@@ -84,7 +84,7 @@ export default function PhoneLogin() {
 
       toast.success("Phone login successful");
 
-      navigate("/home");
+      navigate("/dynamic-calculator");
     } catch (err) {
       console.error("Verify OTP error:", err);
       toast.error(err.code + " : " + err.message);
@@ -93,7 +93,7 @@ export default function PhoneLogin() {
 
   return (
     <div className="phone-page">
-      <h1 className="phone-header">Mobile Login</h1>
+      <h1 className="phone-header">Mobile Number Login</h1>
 
       <div className="phone-container">
         {step === "phone" ? (
@@ -102,7 +102,7 @@ export default function PhoneLogin() {
             <input
               type="tel"
               className="phone-input"
-              placeholder="Enter mobile number"
+              placeholder="Enter Your Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />

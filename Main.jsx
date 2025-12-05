@@ -9,6 +9,7 @@ import ForgotPassword from "./src/Components/ForgotPassword";
 import Home from "./src/Components/Home";
 import Signup from "./src/Components/Signup";
 import Login from "./src/Components/Login";
+import DynamicReactCalculator from "./src/Components/DynamicCalculator";
 
 
 export default function Main() {
@@ -22,6 +23,10 @@ export default function Main() {
             <Route path="/home" element={<Home />} />
             <Route path="/phone-login" element={<PhoneLogin />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/dynamic-calculator"
+              element={<DynamicReactCalculator />}
+            />
           </Routes>
         </BrowserRouter>
       </React.StrictMode>
